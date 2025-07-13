@@ -6,7 +6,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/departments', require('./routes/departments'));
-// app.use('/api/employees', require('./routes/employees'));
+app.use('/api/employees', require('./routes/employees'));
 // app.use('/api/salaries', require('./routes/salaries'));
 // app.use('/api/products', require('./routes/products'));
 // app.use('/api/sales', require('./routes/sales'));
