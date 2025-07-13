@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const [rows] = await db.query('SELECT * FROM Department WHERE id = ?', [id]);
+    const [rows] = await db.query('SELECT * FROM Department WHERE idEmployees = ?', [id]);
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Department not found' });
     }
