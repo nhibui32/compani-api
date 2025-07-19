@@ -26,7 +26,19 @@ router.get('/:idSalaries', async(req,res)=>{
     }
 })
 
-// // get all salaries for an employees 
-// router.get('/:idEmployees')
+// // // get all salaries for an employees 
+// router.get('/:idEmployees', async(req, res)=>{
+//     const {idEmployees} = req.params
+//     try{
+//         const[rows] = await db.query('SELECT * FROM Salaries WHERE idEmployees = ?', [idEmployees]);
+//         if(rows.length === 0){
+//             return res.status(404).json({error: 'Employees not found'});
+//         }
+//         res.json(rows)
+//     }catch(err){
+//         res.status(500).json({error: err.message})
+//     }
+// })
+
 
 module.exports = router

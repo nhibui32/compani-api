@@ -2,15 +2,17 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db')
 
-// get all employees 
-router.get('/', async(req, res) =>{
-    try{
-        const [rows] = await db.query('SELECT * FROM Employees');
-        res.json(rows)
-    }catch(err){
-        res.status(500).json({error: err.message});
-    }
-})
+// // get all employees 
+// router.get('/', async(req, res) =>{
+//     try{
+//         const [rows] = await db.query('SELECT * FROM Employees');
+//         res.json(rows)
+//     }catch(err){
+//         res.status(500).json({error: err.message});
+//     }
+// })
+
+// we don't need this because we have the filtering function below
 
 // get employees by ids 
 router.get('/:idEmployees', async(req, res)=>{
@@ -26,19 +28,26 @@ router.get('/:idEmployees', async(req, res)=>{
     }
 })
 
-// get employees by department 
-router.get('/department/:idDepartment', async (req, res) =>{
-    const {idDepartment} = req.params;
-    try{
-        const[rows] = await db.query(' SELECT * FROM Employees WHERE idDepartment = ?', [idDepartment]);
-        if (rows.length === 0){
-            return res.status(404).json({error: 'Employees in this Department not found'})
-        }
-        res.json(rows)
-    }catch(err){
-        res.status(500).json({error: err.message})
+
+// GET all employees or filter by idDepartment
+router.get('/', async (req, res) => {
+  const { idDepartment } = req.query;
+
+  try {
+    let query = 'SELECT * FROM Employees';
+    let params = [];
+
+    if (idDepartment) {
+      query += ' WHERE idDepartment = ?';
+      params.push(idDepartment);
     }
-})
+
+    const [rows] = await db.query(query, params);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // post a new employees 
 router.post('/', async(req, res)=>{
