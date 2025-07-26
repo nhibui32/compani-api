@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
 app.use(express.json());
@@ -11,7 +12,7 @@ app.use('/api/salaries', require('./routes/salaries'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/sales', require('./routes/sales'));
 app.use('/api/stock', require('./routes/stock'));
-
+app.use('/auth', authRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
