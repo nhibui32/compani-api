@@ -5,7 +5,7 @@ const db = require('../db')
 // get all the stock information 
 router.get('/', async(req, res)=>{
     try{
-        const[rows] = await db.query('SELECT * FROM Stock');
+        const[rows] = await db.query('SELECT * FROM stock');
         res.json(rows)
     }catch(err){
         res.status(500).json({error: err.message})
@@ -16,7 +16,7 @@ router.get('/', async(req, res)=>{
 router.get('/:idProduct', async(req , res)=>{
     const{idProduct} = req.params;
     try{
-        const [rows] = await db.query('SELECT * FROM Stock WHERE idProduct = ?', [idProduct])
+        const [rows] = await db.query('SELECT * FROM stock WHERE idProduct = ?', [idProduct])
         res.json(rows)
     }catch(err){
         res.status(500).json({error: err.message})
@@ -31,7 +31,7 @@ router.post('/', async(req , res)=>{
     };
 
     try{
-        const[result] = await db.query("INSERT INTO Stock (idStock, idProduct, quantity, lastUpdate) VALUE (?, ?, ?, ?)", [idStock, idProduct, quantity, lastUpdate]);
+        const[result] = await db.query("INSERT INTO stock (idStock, idProduct, quantity, lastUpdate) VALUE (?, ?, ?, ?)", [idStock, idProduct, quantity, lastUpdate]);
         res.status(201).json({idStock, idProduct, quantity, lastUpdate})
     }catch(err){
         res.status(500).json({error: err.message})
@@ -43,7 +43,7 @@ router.put('/:idProduct', async(req , res)=>{
     const {idProduct} = req.params;
     const{idStock, quantity, lastUpdate} = req.body;
     try{
-        const[results] = await db.query('UPDATE Stock Set idProduct = ? , quantity = ?, lastUpdate = ? WHERE idProduct = ?' , [idStock, quantity, lastUpdate, idProduct]);
+        const[results] = await db.query('UPDATE stock Set idProduct = ? , quantity = ?, lastUpdate = ? WHERE idProduct = ?' , [idStock, quantity, lastUpdate, idProduct]);
         if(results.affectedRows == 0){
             return res.status(404).json({error: "not update anything"})
         }
@@ -57,7 +57,7 @@ router.put('/:idProduct', async(req , res)=>{
 router.delete('/:idProduct', async(req , res)=>{
     const{idProduct} = req.params;
     try{
-        const[result] = await db.query('DELETE FROM Stock WHERE idProduct = ?', [idProduct])
+        const[result] = await db.query('DELETE FROM stock WHERE idProduct = ?', [idProduct])
         if(result.affectedRows == 0){
             return res.status(404).json({error: "Stock not found"})
         }

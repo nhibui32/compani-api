@@ -8,7 +8,7 @@ const db = require('../db');
 router.get('/:idSalaries', async(req,res)=>{
     const {idSalaries} = req.params
     try{
-        const[rows] = await db.query('SELECT * FROM Salaries WHERE idSalaries = ?', [idSalaries]);
+        const[rows] = await db.query('SELECT * FROM salaries WHERE idSalaries = ?', [idSalaries]);
         if(rows.length === 0){
             return res.status(404)({error: 'Salary not found'})
         }
@@ -22,7 +22,7 @@ router.get('/:idSalaries', async(req,res)=>{
 router.get('/', async(req, res)=>{
     const{idEmployees} = req.query;
     try{
-        let query = 'SELECT * FROM Salaries ';
+        let query = 'SELECT * FROM salaries ';
         let params = [];
 
         if(idEmployees){
@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
     await Promise.all(
       salaries.map(({ idSalaries, idEmployees, amount, fromDate, toDate }) =>
         db.query(
-          'INSERT INTO Salaries (idSalaries, idEmployees, amount, fromDate, toDate) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO salaries (idSalaries, idEmployees, amount, fromDate, toDate) VALUES (?, ?, ?, ?, ?)',
           [idSalaries, idEmployees, amount, fromDate, toDate]
         )
       )
@@ -99,7 +99,7 @@ router.put('/:idSalaries', async(req, res)=>{
 
     try{
         const[result] = await db.query(
-            'UPDATE Salaries SET idEmployees = ?, amount = ? , fromDate = ? , toDate = ? WHERE idSalaries = ? ', [idEmployees, amount, fromDate, toDate, idSalaries]
+            'UPDATE salaries SET idEmployees = ?, amount = ? , fromDate = ? , toDate = ? WHERE idSalaries = ? ', [idEmployees, amount, fromDate, toDate, idSalaries]
         );
 
         if(result.affectedRows === 0){
@@ -116,7 +116,7 @@ router.delete('/:idSalaries', async(req,res)=>{
     const {idSalaries} = req.params;
 
     try{
-        const[results] = await db.query('DELETE FROM Salaries WHERE idSalaries= ? ', [idSalaries]);
+        const[results] = await db.query('DELETE FROM salaries WHERE idSalaries= ? ', [idSalaries]);
 
         if(results.affectedRows === 0){
             return res.status(404).json({error: 'Salary not found'});

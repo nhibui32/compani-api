@@ -5,7 +5,7 @@ const db = require('../db');
 // GET all departments
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM Department');
+    const [rows] = await db.query('SELECT * FROM department');
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -16,9 +16,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const [rows] = await db.query('SELECT * FROM Department WHERE idEmployees = ?', [id]);
+    const [rows] = await db.query('SELECT * FROM department WHERE id = ?', [id]);
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'Department not found' });
+      return res.status(404).json({ error: 'department not found' });
     }
     res.json(rows[0]);
   } catch (err) {
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 
   try {
     const [result] = await db.query(
-      'INSERT INTO Department (id,name, location) VALUES (?, ?, ?)',
+      'INSERT INTO department (id, name, location) VALUES (?, ?, ?)',
       [id, name, location]
     );
     res.status(201).json({ id, name, location });
@@ -56,13 +56,13 @@ router.put('/:id', async (req, res) => {
 
   try {
     const [result] = await db.query(
-      'UPDATE Department SET name = ?, location = ? WHERE id = ?',
+      'UPDATE department SET name = ?, location = ? WHERE id = ?',
       [name, location, id]
     );
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Department not found' });
+      return res.status(404).json({ error: 'department not found' });
     }
-    res.json({ message: 'Department updated successfully' });
+    res.json({ message: 'department updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -73,11 +73,11 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [result] = await db.query('DELETE FROM Department WHERE id = ?', [id]);
+    const [result] = await db.query('DELETE FROM department WHERE id = ?', [id]);
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Department not found' });
+      return res.status(404).json({ error: 'department not found' });
     }
-    res.json({ message: 'Department deleted successfully' });
+    res.json({ message: 'department deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

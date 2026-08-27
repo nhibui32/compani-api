@@ -5,7 +5,7 @@ const db = require('../db');
 // get list all products 
 router.get('/', async(req, res)=>{
     try{
-        const[rows] = await db.query('SELECT * FROM Product');
+        const[rows] = await db.query('SELECT * FROM product');
         res.json(rows)
     }catch(err){
         res.status(500).json({error: err.message})
@@ -16,9 +16,9 @@ router.get('/', async(req, res)=>{
 router.get('/:idProduct', async(req,res)=>{
     const {idProduct} = req.params;
     try{
-        const [rows] = await db.query('SELECT * FROM Product WHERE idProduct = ? ', [idProduct]);
+        const [rows] = await db.query('SELECT * FROM product WHERE idProduct = ? ', [idProduct]);
         if(rows.length === 0){
-            return res.status(404).json({error: 'Product not found'})
+            return res.status(404).json({error: 'product not found'})
         }
         res.json(rows)
     }catch(err){
@@ -45,7 +45,7 @@ router.post('/', async(req,res)=>{
         await Promise.all(
             products.map(({idProduct, name, category, price})=>
                 db.query(
-                    'INSERT INTO Product (idProduct, name, category, price) VALUES (?, ?, ?, ?)', [idProduct, name, category, price]
+                    'INSERT INTO product (idProduct, name, category, price) VALUES (?, ?, ?, ?)', [idProduct, name, category, price]
                 )
             )
         );
@@ -65,7 +65,7 @@ router.put('/:idProduct', async(req,res)=>{
 
     try{
         const[result] = await db.query(
-            'UPDATE Product SET name = ?, category = ?, price = ? WHERE idProduct = ?', [name, category, price, idProduct]
+            'UPDATE product SET name = ?, category = ?, price = ? WHERE idProduct = ?', [name, category, price, idProduct]
         );
 
         if(result.affectedRows === 0){
@@ -83,7 +83,7 @@ router.delete('/:idProduct', async(req, res)=>{
     const{idProduct} = req.params;
 
     try{
-        const [results] = await db.query('DELETE FROM Product WHERE idProduct = ?', [idProduct]);
+        const [results] = await db.query('DELETE FROM product WHERE idProduct = ?', [idProduct]);
 
         if(results.affectedRows === 0){
             return res.status(404).json({error: 'product not found'});

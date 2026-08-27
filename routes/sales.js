@@ -16,9 +16,9 @@ const db = require('../db');
 router.get('/:idSales', async(req,res)=>{
     const {idSales} = req.params;
     try{
-        const[rows] = await db.query('SELECT * FROM Sales WHERE idSales = ?', [idSales]);
+        const[rows] = await db.query('SELECT * FROM sales WHERE idSales = ?', [idSales]);
         if(rows.length === 0){
-            return res.status(404).json({error: ' Sales not found'});
+            return res.status(404).json({error: ' sales not found'});
         };
         res.json(rows)
 
@@ -31,7 +31,7 @@ router.get('/:idSales', async(req,res)=>{
 router.get('/', async(req,res)=>{
     const {idEmployees, idProduct} = req.query;
     try{
-        let query = 'SELECT * FROM Sales';
+        let query = 'SELECT * FROM sales';
         let conditions = [];
         let params = [];
 
@@ -64,7 +64,7 @@ router.post('/', async(req,res)=>{
     }
 
     try{
-        const[result]= await db.query('INSERT INTO Sales (idSales, idProduct, idEmployees, quantity, saleDate) VALUES (?, ?, ?, ?, ?)', [idSales, idProduct, idEmployees, quantity, saleDate]);
+        const[result]= await db.query('INSERT INTO sales (idSales, idProduct, idEmployees, quantity, saleDate) VALUES (?, ?, ?, ?, ?)', [idSales, idProduct, idEmployees, quantity, saleDate]);
         res.status(201).json({idSales, idProduct, idEmployees, quantity, saleDate})
     }catch(err){
         res.status(500).json({error: err.message})
@@ -79,7 +79,7 @@ router.put('/:idSales', async(req,res)=>{
         return res.status(400).json({error: 'id Product, id employees, quantity, and sale date are required'})
     }
     try{
-        const[result] = await db.query('UPDATE Sales SET idProduct = ?, idEmployees = ?, quantity = ?, saleDate = ? WHERE idSales = ?', [idProduct, idEmployees, quantity, saleDate, idSales])
+        const[result] = await db.query('UPDATE sales SET idProduct = ?, idEmployees = ?, quantity = ?, saleDate = ? WHERE idSales = ?', [idProduct, idEmployees, quantity, saleDate, idSales])
         if(result.affectedRows === 0){
             return res.status(404).json({error: 'sales not found'})
         }
@@ -94,7 +94,7 @@ router.put('/:idSales', async(req,res)=>{
 router.delete('/:idSales', async(req,res)=>{
     const {idSales} = req.params;
     try{
-        const [result] = await db.query('DELETE FROM Sales WHERE idSales = ?', [idSales])
+        const [result] = await db.query('DELETE FROM sales WHERE idSales = ?', [idSales])
 
         if(result.affectedRows === 0){
             return res.status(404).json({error: 'sales not found'})

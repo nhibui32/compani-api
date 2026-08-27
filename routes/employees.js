@@ -18,7 +18,7 @@ const db = require('../db')
 router.get('/:idEmployees', async(req, res)=>{
     const {idEmployees} = req.params;
     try{
-        const [rows] = await db.query('SELECT * FROM Employees WHERE idEmployees = ?', [idEmployees]);
+        const [rows] = await db.query('SELECT * FROM employees WHERE idEmployees = ?', [idEmployees]);
         if (rows.length === 0 ){
             return res.status(404).json({error: 'Employees with this id not found'})
         }
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
   const { idDepartment } = req.query;
 
   try {
-    let query = 'SELECT * FROM Employees';
+    let query = 'SELECT * FROM employees';
     let params = [];
 
     if (idDepartment) {
@@ -58,7 +58,7 @@ router.post('/', async(req, res)=>{
 
     try{
         const [result] = await db.query(
-            'INSERT INTO Employees (idEmployees, name, email, idDepartment, hireDate) VALUES ( ?, ?, ?, ?, ?)', [idEmployees, name, email, idDepartment, hireDate]
+            'INSERT INTO employees (idEmployees, name, email, idDepartment, hireDate) VALUES ( ?, ?, ?, ?, ?)', [idEmployees, name, email, idDepartment, hireDate]
         );
         res.status(201).json({idEmployees, name, email, idDepartment, hireDate})
     }catch(err){
@@ -76,7 +76,7 @@ router.put('/:idEmployees', async(req, res)=>{
 
     try{
         const [result] = await db.query(
-            'UPDATE Employees SET name = ?, email =?, idDepartment = ?, hireDate = ? WHERE idEmployees = ?', [name, email, idDepartment, hireDate, idEmployees]
+            'UPDATE employees SET name = ?, email =?, idDepartment = ?, hireDate = ? WHERE idEmployees = ?', [name, email, idDepartment, hireDate, idEmployees]
         );
         if(result.affectedRows === 0){
             return res.status(404).json({error: 'Employees not found'});
@@ -94,10 +94,10 @@ router.delete('/:idEmployees', async(req, res)=>{
 
     try{
         // Step 1: Delete related salary records
-        await db.query('DELETE FROM Salaries WHERE idEmployees = ?', [idEmployees]);
+        await db.query('DELETE FROM salaries WHERE idEmployees = ?', [idEmployees]);
 
         // Step 2: Delete the employee
-        const [results] = await db.query('DELETE FROM Employees WHERE idEmployees = ?', [idEmployees]);
+        const [results] = await db.query('DELETE FROM employees WHERE idEmployees = ?', [idEmployees]);
 
         if(results.affectedRows === 0){
             return res.status(404).json({error: 'Employee not found'});
