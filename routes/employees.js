@@ -23,9 +23,12 @@ router.get('/:idEmployees', async(req, res)=>{
             return res.status(404).json({error: 'Employees with this id not found'})
         }
         res.json(rows)
-    }catch(err){
-        res.status(500).json({error: err.message})
-    }
+    } catch (err) {
+    console.error('DATABASE ERROR:', err);
+    res.status(500).json({
+        error: err.message || 'Database connection/query failed'
+    });
+}
 })
 
 
@@ -45,8 +48,11 @@ router.get('/', async (req, res) => {
     const [rows] = await db.query(query, params);
     res.json(rows);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    console.error('DATABASE ERROR:', err);
+    res.status(500).json({
+        error: err.message || 'Database connection/query failed'
+    });
+}
 });
 
 // post a new employees 
@@ -61,9 +67,12 @@ router.post('/', async(req, res)=>{
             'INSERT INTO employees (idEmployees, name, email, idDepartment, hireDate) VALUES ( ?, ?, ?, ?, ?)', [idEmployees, name, email, idDepartment, hireDate]
         );
         res.status(201).json({idEmployees, name, email, idDepartment, hireDate})
-    }catch(err){
-        res.status(500).json({error: err.message})
-    }
+    } catch (err) {
+    console.error('DATABASE ERROR:', err);
+    res.status(500).json({
+        error: err.message || 'Database connection/query failed'
+    });
+}
 })
 
 // put (update) an employees
@@ -82,9 +91,12 @@ router.put('/:idEmployees', async(req, res)=>{
             return res.status(404).json({error: 'Employees not found'});
         }
         res.json({message: 'Employee updated successfully'})
-    }catch(err){
-        res.status(500).json({error: err.message})
-    }
+    } catch (err) {
+    console.error('DATABASE ERROR:', err);
+    res.status(500).json({
+        error: err.message || 'Database connection/query failed'
+    });
+}
 })
 
 
@@ -103,8 +115,11 @@ router.delete('/:idEmployees', async(req, res)=>{
             return res.status(404).json({error: 'Employee not found'});
         }
         res.json({message: 'Employee deleted successfully'});
-    }catch(err){
-        res.status(500).json({error: err.message});
+    } catch (err) {
+        console.error('DATABASE ERROR:', err);
+        res.status(500).json({
+            error: err.message || 'Database connection/query failed'
+        });
     }
 });
 module.exports = router
